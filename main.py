@@ -5,9 +5,11 @@ import math
 import sys
 import os
 
+# Windows environment text crash fix
 if sys.platform.startswith('win'):
     os.environ["PYTHONIOENCODING"] = "utf-8"
 
+# Standard stable import
 import mediapipe as mp
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
@@ -23,12 +25,12 @@ WHITE_SQ = (245, 245, 220)
 BLACK_SQ = (139, 115, 85)
 HIGHLIGHT = (255, 191, 0)
 SELECT_COLOR = (0, 165, 255)
-TEXT_COLOR = (40, 40, 40)
+TEXT_COLOR = (30, 30, 30)
 
-# Windows compatible standard display characters
+# FINAL UPDATED SYMBOLS: Knight = KN, Pawn = P, Rook = R, Bishop = B, Queen = Q, King = K
 PIECE_SYMBOLS = {
-    'R': 'R', 'N': 'N', 'B': 'B', 'Q': 'Q', 'K': 'K', 'P': 'P',
-    'r': 'r', 'n': 'n', 'b': 'b', 'q': 'q', 'k': 'k', 'p': 'p'
+    'P': 'B.P', 'R': 'B.R', 'N': 'B.KN', 'B': 'B.B', 'Q': 'B.Q', 'K': 'B.K', # Black Pieces
+    'p': 'W.P', 'r': 'W.R', 'n': 'W.KN', 'b': 'W.B', 'q': 'W.Q', 'k': 'W.K'  # White Pieces
 }
 
 def pixel_dist(a, b):
@@ -67,7 +69,9 @@ def draw_board(img, board, selected_square=None, hover_square=None, last_move=No
         f, r = chess.square_file(sq), chess.square_rank(sq)
         x, y = left + f * SQUARE, top + (7 - r) * SQUARE
         symbol = PIECE_SYMBOLS.get(piece.symbol(), piece.symbol())
-        cv2.putText(img, symbol, (x + SQUARE // 2 - 15, y + SQUARE // 2 + 15), cv2.FONT_HERSHEY_SIMPLEX, 1.0, TEXT_COLOR, 2, cv2.LINE_AA)
+        
+        # Centering text within the square
+        cv2.putText(img, symbol, (x + SQUARE // 2 - 28, y + SQUARE // 2 + 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, TEXT_COLOR, 2, cv2.LINE_AA)
 
     cv2.rectangle(img, (left, top), (left + BOARD_SIZE, top + BOARD_SIZE), (60, 60, 60), 3)
 
